@@ -39,6 +39,9 @@ for n = 1:global_bujet
     
     % 結果の表示
     disp([mat2str(n), '回目のベストなインプット: ', mat2str(xmin)]);
+
+    mapping_input = mapping_algo2(xmin, input_cp, dimension1_LBounds, dimension1_UBounds, dimension2_LBounds, dimension2_UBounds);
+    disp(['マッピング後のインプット: ', mat2str(mapping_input)]);
     disp([mat2str(n), '回目のベストな差: ', num2str(-1*fmin)]);
 
     if best_difference < -1*fmin
@@ -49,6 +52,9 @@ end
 
 % 結果の表示
 disp(['ベストなインプット: ', mat2str(best_input)]);
+
+best_mapping_input = mapping_algo2(best_input, input_cp, dimension1_LBounds, dimension1_UBounds, dimension2_LBounds, dimension2_UBounds);
+disp(['マッピング後のベストなインプット: ', mat2str(best_mapping_input)]);
 disp(['ベストな差: ', num2str(best_difference)]);
 
 f = best_difference;
@@ -60,19 +66,7 @@ end
 function f = objective_function_algo2(mdl, dimension1_LBounds, dimension1_UBounds, dimension2_LBounds, dimension2_UBounds, input_type, input_cp, spec1, time_span, x)   
 
     %インプットの調整
-    for i = 0:input_cp - 1
-        if 0 <= x(2 + i*4)
-            x(1 + i*4) = x(1 + i*4) * ((dimension1_UBounds - dimension1_LBounds) - x(2 + i*4)) / (dimension1_UBounds - dimension1_LBounds);
-        else
-            x(1 + i*4) = x(1 + i*4) * ((dimension1_UBounds - dimension1_LBounds) + x(2 + i*4)) / (dimension1_UBounds - dimension1_LBounds) + x(2 + i*4);
-        end
-    
-        if 0 <= x(4 + i*4)
-            x(3 + i*4) = x(3 + i*4) * ((dimension2_UBounds - dimension2_LBounds) - x(4 + i*4)) / (dimension2_UBounds - dimension2_LBounds);
-        else
-            x(3 + i*4) = x(3 + i*4) * ((dimension2_UBounds - dimension2_LBounds) + x(4 + i*4)) / (dimension2_UBounds - dimension2_LBounds) + x(4 + i*4);
-        end
-    end
+    x = mapping_algo2(x, input_cp, dimension1_LBounds, dimension1_UBounds, dimension2_LBounds, dimension2_UBounds);
 
     
     % Br1としてBr1eachSimulinkSystemクラスのインスタンスを生成する
@@ -137,4 +131,22 @@ function f = objective_function_algo2(mdl, dimension1_LBounds, dimension1_UBound
     f = - abs(stl1 - stl2);
 
     disp(['1つ目:', num2str(stl1), ' 2つ目:', num2str(stl2), ' 差:', num2str(-1*f)]);
+end
+
+function f = mapping_algo2(x, input_cp, dimension1_LBounds, dimension1_UBounds, dimension2_LBounds, dimension2_UBounds)
+    for i = 0:input_cp - 1
+        if 0 <= x(2 + i*4)
+            x(1 + i*4) = x(1 + i*4) * ((dimension1_UBounds - dimension1_LBounds) - x(2 + i*4)) / (dimension1_UBounds - dimension1_LBounds);
+        else
+            x(1 + i*4) = x(1 + i*4) * ((dimension1_UBounds - dimension1_LBounds) + x(2 + i*4)) / (dimension1_UBounds - dimension1_LBounds) + x(2 + i*4);
+        end
+    
+        if 0 <= x(4 + i*4)
+            x(3 + i*4) = x(3 + i*4) * ((dimension2_UBounds - dimension2_LBounds) - x(4 + i*4)) / (dimension2_UBounds - dimension2_LBounds);
+        else
+            x(3 + i*4) = x(3 + i*4) * ((dimension2_UBounds - dimension2_LBounds) + x(4 + i*4)) / (dimension2_UBounds - dimension2_LBounds) + x(4 + i*4);
+        end
+    end
+
+    f = x;
 end
