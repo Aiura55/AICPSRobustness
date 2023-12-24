@@ -1,4 +1,4 @@
-function f = afc_algo4_test2(mdl, epsilon, dimension1_LBounds, dimension1_UBounds, dimension2_LBounds, dimension2_UBounds, input_type, input_cp, spec1, spec2, time_span, max_time, global_bujet, MaxFunEvals)
+function f = afc_algo4(mdl, epsilon, dimension1_LBounds, dimension1_UBounds, dimension2_LBounds, dimension2_UBounds, input_type, input_cp, spec1, spec2, time_span, max_time, global_bujet, MaxFunEvals)
 
 best_input = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 best_difference = 0;
