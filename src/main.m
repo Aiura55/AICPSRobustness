@@ -5,7 +5,7 @@ close all;
 % command windowをクリアする
 clc;
 % CPSTutorialのあるリポジトリにパスを置き換える
-addpath(genpath('C:\Users\onepi\Documents\test2'));
+addpath(genpath('C:\Users\onepi\Documents\test'));
 % Breachを起動する
 InitBreach;
 
@@ -27,11 +27,16 @@ T = 50;
 
 epsilon = 0.03;
 
-dimension1_LBounds = 900.0; % 最小値
-dimension1_UBounds = 1100.0; % 最大値
+%加えた
+input_name = {'Engine_Speed', 'Pedal_Angle'};
+input_range = [900, 1100; 10.0, 60];
 
-dimension2_LBounds = 10.0; % 最小値
-dimension2_UBounds = 60.0; % 最大値
+
+%dimension1_LBounds = 900.0; % 最小値
+%dimension1_UBounds = 1100.0; % 最大値
+
+%dimension2_LBounds = 10.0; % 最小値
+%dimension2_UBounds = 60.0; % 最大値
 
 input_type = 'UniStep';
 input_cp = 3;
@@ -42,14 +47,9 @@ spec1 = 'alw_[0,30](AF[t] < 1.2*14.7 and AF[t] > 0.8*14.7)';
 spec2 = 'not alw_[0,30](AF[t] < 1.2*14.7 and AF[t] > 0.8*14.7)';
 
 max_time = 100; %1回あたりのcmaesの時間上限が100秒
-
-global_bujet = 3; %繰り返す回数
-
-
-%afc_algo1_test2(mdl, epsilon, dimension1_LBounds, dimension1_UBounds, dimension2_LBounds, dimension2_UBounds, input_type, input_cp, spec1, spec2, time_span, max_time, global_bujet);
-
 MaxFunEvals = 10;
-%afc_algo2_test2(mdl, epsilon, dimension1_LBounds, dimension1_UBounds, dimension2_LBounds, dimension2_UBounds, input_type, input_cp, spec1, spec2, time_span, max_time, global_bujet, MaxFunEvals);
-%afc_algo3_test2(mdl, epsilon, dimension1_LBounds, dimension1_UBounds, dimension2_LBounds, dimension2_UBounds, input_type, input_cp, spec1, spec2, time_span, max_time, global_bujet, MaxFunEvals);
-afc_algo4_test2(mdl, epsilon, dimension1_LBounds, dimension1_UBounds, dimension2_LBounds, dimension2_UBounds, input_type, input_cp, spec1, spec2, time_span, max_time, global_bujet, MaxFunEvals);
 
+afc_algo1(mdl, epsilon, input_name, input_range, input_type, input_cp, spec1, spec2, time_span, max_time, max_fun_evals);
+%afc_algo2(mdl, epsilon, input_name, input_range, input_type, input_cp, spec1, spec2, time_span, max_time, MaxFunEvals);
+%afc_algo3(mdl, epsilon, input_name, input_range, input_type, input_cp, spec1, spec2, time_span, max_time, MaxFunEvals);
+%afc_algo4(mdl, epsilon, input_name, input_range, input_type, input_cp, spec1, spec2, time_span, max_time, MaxFunEvals);
