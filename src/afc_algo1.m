@@ -1,6 +1,6 @@
 function f = afc_algo1(mdl, epsilon, input_name, input_range, input_type, input_cp, spec1, spec2, time_span, max_time, max_fun_evals)
 
-dimension_num = length(input_name); %インプットの次元数
+dimension_num = numel(input_name); %インプットの次元数
 
 basis_input = ones(dimension_num,input_cp);
 
@@ -61,7 +61,7 @@ for d = 1:dimension_num
             Br.SetParamRanges({input_sig},[input_range(d, 1) basis_input(d, cpi+1)+(input_range(d, 2) - input_range(d, 1)) * epsilon]);
         elseif input_range(d, 2) < basis_input(d, cpi+1)+(input_range(d, 2) - input_range(d, 1)) * epsilon
             Br.SetParamRanges({input_sig},[basis_input(d, cpi+1)-(input_range(d, 2) - input_range(d, 1)) * epsilon input_range(d, 2)]);
-        else
+            elses
             Br.SetParamRanges({input_sig},[basis_input(d, cpi+1)-(input_range(d, 2) - input_range(d, 1)) * epsilon basis_input(d, cpi+1)+(input_range(d, 2) - input_range(d, 1)) * epsilon]);
         end
     end

@@ -9,7 +9,7 @@ classdef TwoInputProblem < FalsificationProblem
         function this = TwoInputProblem(BrSet, phi, ep, threshold)
             this = this@FalsificationProblem(BrSet, phi);
             this.epsilon = (this.ub - this.lb)*ep;
-            this.threhold = threshold;
+            this.threshold = threshold;
             rng('default');
             rng(round(rem(now, 1)*1000000));
         end

@@ -11,7 +11,7 @@ classdef InputEpsilonProblem < FalsificationProblem
         function this = InputEpsilonProblem(BrSet, phi, ep, threshold, mp)
             this = this@FalsificationProblem(BrSet, phi);
             this.epsilon = (this.ub - this.lb)*ep;
-            this.threhold = threshold;
+            this.threshold = threshold;
             this.map_param = mp;
             rng('default');
             rng(round(rem(now, 1)*1000000));
@@ -31,14 +31,14 @@ classdef InputEpsilonProblem < FalsificationProblem
         end
 
         function x0 = set_X0(this)
-            x1 = this.lb + rand(1, numel(this.lb)).*(this.ub - this.lb);
-            x2 = -this.epsilon + rand(1, numel(this.lb)).*(2*this.epsilon);
-            x0 = [x1 x2];
+            x1 = this.lb + rand(numel(this.lb),1).*(this.ub - this.lb);
+            x2 = -this.epsilon + rand(numel(this.lb), 1).*(2*this.epsilon);
+            x0 = [x1 ;x2];
         end
 
         function solver_opt = setCMAES(this)
-            l_ = [this.lb -this.epsilon];
-            u_ = [this.ub this.epsilon];
+            l_ = [this.lb; -this.epsilon];
+            u_ = [this.ub; this.epsilon];
             solver_opt = cmaes();
             solver_opt.Seed = round(rem(now,1)*1000000);
             solver_opt.LBounds = l_;

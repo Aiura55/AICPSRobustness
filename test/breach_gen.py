@@ -8,11 +8,11 @@ osys = platform.system()
 if osys == 'Linux':
 	mpaths = glob.glob('/usr/local/MATLAB/*/bin/')
 	mpaths.sort()
-	matlab = mpaths[-1] + '/matlab'
+	matlab = mpaths[-1] + 'matlab'
 elif osys == 'Darwin':
 	mpaths = glob.glob('/Applications/MATLAB*/bin/')
 	mpaths.sort()
-	matlab = mpaths[-1] + '/matlab'
+	matlab = mpaths[-1] + 'matlab'
 
 
 model = ''
@@ -92,16 +92,16 @@ with open(sys.argv[1],'r') as conf:
 			if linenum == 0:
 				status = 0
 
-
+print(parameters)
 for ph in phi_str:
 	for cp in controlpoints:
 		for opt in optimization:
 			for alg in algorithm:
 				for eps_i in range(len(epsilon)):
 					property = ph.split(';')
-					filename = model+ '_breach_' + property[0] 
+					filename = model+ '_' + alg + '_' + property[0] + '_' + epsilon[eps_i] + '_' + threshold[eps_i]
 					param = '\n'.join(parameters)
-					with open('test/benchmarks/'+filename,'w') as bm:
+					with open('benchmarks/'+filename,'w') as bm:
 						bm.write('#!/bin/sh\n')
 						bm.write('csv=$1\n')
 						bm.write(matlab + ' -nodesktop -nosplash <<EOF\n')
@@ -129,7 +129,6 @@ for ph in phi_str:
 		
 						bm.write('trials = ' + trials + ';\n')	
 						bm.write('filename = \''+filename+'\';\n')
-						bm.write('algorithm = \'Breach\';\n')
 						bm.write('falsified = [];\n')
 						bm.write('time = [];\n')
 						bm.write('obj_best = [];\n')
@@ -138,19 +137,22 @@ for ph in phi_str:
 						if alg == 'Random':
 							bm.write('locBudget = '+ locBudget + ';\n')
 		
+						bm.write('epsilon = ' + epsilon[eps_i] + ';\n')
+						bm.write('threshold = ' + threshold[eps_i] + ';\n')
+
 						bm.write('for n = 1:trials\n')
 						if alg == 'Random':
-							bm.write('\tfalsif_pb = RandomProblem(Br,phi,epsilon[eps_i], threshold[eps_i], locBudget);\n')
+							bm.write('\tfalsif_pb = RandomProblem(Br,phi,epsilon,threshold,locBudget);\n')
 						elif alg == 'TwoInput':
-							bm.write('\tfalsif_pb = TwoInputProblem(Br, phi, epsilon[eps_i], threshold[eps_i]);\n')
+							bm.write('\tfalsif_pb = TwoInputProblem(Br, phi,epsilon,threshold);\n')
 						elif alg == 'InputEpsilon1':
-							bm.write('\tfalsif_pb = InputEpsilonProblem(Br, phi, epsilon[eps_i], threshold[eps_i], 1);\n')
+							bm.write('\tfalsif_pb = InputEpsilonProblem(Br, phi,epsilon,threshold, 1);\n')
 						elif alg == 'InputEpsilon2':
-							bm.write('\tfalsif_pb = InputEpsilonProblem(Br, phi, epsilon[eps_i], threshold[eps_i], 2);\n')
+							bm.write('\tfalsif_pb = InputEpsilonProblem(Br, phi,epsilon,threshold, 2);\n')
 						elif alg == 'DPTwoInput':
-							bm.write('\tfalsif_pb = DPTwoInputProblem(Br, phi, epsilon[eps_i], threshold[eps_i]);\n')
+							bm.write('\tfalsif_pb = DPTwoInputProblem(Br, phi, epsilon, threshold);\n')
 						elif alg == 'DPInputEpsilon':
-							bm.write('\tfalsif_pb = DPInputEpsilonProblem(Br, phi, epsilon[eps_i], threshold[eps_i]);\n')
+							bm.write('\tfalsif_pb = DPInputEpsilonProblem(Br, phi, epsilon, threshold);\n')
 						else:
 							print("algorithm is wrong!")
 
@@ -160,7 +162,7 @@ for ph in phi_str:
 							bm.write('\tfalsif_pb.max_obj_eval = ' + max_sim + ';\n')
 						bm.write('\tfalsif_pb.setup_solver(\''+ opt  +'\');\n')
 						bm.write('\tfalsif_pb.solve();\n')
-						bm.write('\tif falsif_pb.obj_best < 0\n')
+						bm.write('\tif falsif_pb.obj_best < -threshold\n')
 						bm.write('\t\tfalsified = [falsified;1];\n')
 						bm.write('\telse\n')
 						bm.write('\t\tfalsified = [falsified;0];\n')
@@ -182,9 +184,9 @@ for ph in phi_str:
 							bm.write(';filename')
 						bm.write('};\n')
 
-						bm.write('result = table(filename, spec, falsified, time);\n')
+						bm.write('result = table(filename, spec, falsified, time, num_sim, obj_best);\n')
 				
 						bm.write('writetable(result,\'$csv\',\'Delimiter\',\';\');\n')
 						bm.write('quit force\n')
 						bm.write('EOF\n')
-						os.chmod(filename, 0o777)
+						os.chmod('benchmarks/' + filename, 0o777)

@@ -14,7 +14,7 @@ classdef RandomProblem < FalsificationProblem
          function this = RandomProblem(BrSet, phi, ep, threshold, locBud)
              this = this@FalsificationProblem(BrSet, phi);
              this.epsilon = (this.ub - this.lb)*ep;
-             this.threhold = threshold;
+             this.threshold = threshold;
              this.local_budget = locBud;
              this.basic_X = [];
              this.basic_stlv = [];

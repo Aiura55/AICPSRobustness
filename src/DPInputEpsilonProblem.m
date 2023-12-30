@@ -8,11 +8,11 @@ classdef DPInputEpsilonProblem < FalsificationProblem
     end
 
     methods
-        function this = InputEpsilonProblem(BrSet, phi, ep, threshold)
+        function this = DPInputEpsilonProblem(BrSet, phi, ep, threshold)
             this = this@FalsificationProblem(BrSet, phi);
             this.epsilon = ep;
             this.deviation = (this.ub - this.lb)*ep;
-            this.threhold = threshold;
+            this.threshold = threshold;
             rng('default');
             rng(round(rem(now, 1)*1000000));
         end
