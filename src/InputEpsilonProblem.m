@@ -2,19 +2,17 @@ classdef InputEpsilonProblem < FalsificationProblem
 
     properties
         epsilon
-        deviation
 
         threshold
         map_param 
     end
 
     methods
-        function this = InputEpsilonProblem(BrSet, phi, ep, threshold)
+        function this = InputEpsilonProblem(BrSet, phi, ep, threshold, mp)
             this = this@FalsificationProblem(BrSet, phi);
-            this.epsilon = ep;
-            this.deviation = (this.ub - this.lb)*ep;
+            this.epsilon = (this.ub - this.lb)*ep;
             this.threhold = threshold;
-            this.map_param = 1;
+            this.map_param = mp;
             rng('default');
             rng(round(rem(now, 1)*1000000));
         end
@@ -34,13 +32,13 @@ classdef InputEpsilonProblem < FalsificationProblem
 
         function x0 = set_X0(this)
             x1 = this.lb + rand(1, numel(this.lb)).*(this.ub - this.lb);
-            x2 = -this.epsilon + rand(1, numel(this.lb))*(2*this.epsilon);
+            x2 = -this.epsilon + rand(1, numel(this.lb)).*(2*this.epsilon);
             x0 = [x1 x2];
         end
 
         function solver_opt = setCMAES(this)
-            l_ = [this.lb -this.epsilon*ones(1, numel(this.lb))];
-            u_ = [this.ub this.epsilon*ones(1, numel(this.lb))];
+            l_ = [this.lb -this.epsilon];
+            u_ = [this.ub this.epsilon];
             solver_opt = cmaes();
             solver_opt.Seed = round(rem(now,1)*1000000);
             solver_opt.LBounds = l_;
@@ -77,12 +75,12 @@ classdef InputEpsilonProblem < FalsificationProblem
             x_real = x;
             if this.map_param == 1
                 for i = 1:half
-                    if x(i) < this.lb(i) + this.epsilon 
+                    if x(i) < this.lb(i) + this.epsilon(i)
                         x_real(i) = x(i);
-                        x_real(i+half) = this.epsilon - ((this.epsilon - x(i+half))*(this.epsilon+x(i)-this.lb(i))/2*this.epsilon);
-                    elseif x(i) >  this.ub(i) - this.epsilon
+                        x_real(i+half) = this.epsilon(i) - ((this.epsilon(i) - x(i+half))*(this.epsilon(i) + x(i)-this.lb(i))/2*this.epsilon(i));
+                    elseif x(i) >  this.ub(i) - this.epsilon(i)
                         x_real(i) = x(i);
-                        x_real(i+half) = ((x(i+half)+this.epsilon)*(this.epsilon + this.ub(i) - x(i))/2*this.epsilon)-this.epsilon;
+                        x_real(i+half) = ((x(i+half)+this.epsilon(i))*(this.epsilon(i) + this.ub(i) - x(i))/2*this.epsilon(i)) - this.epsilon(i);
                     else
                         x_real(i) = x(i);
                         x_real(i+half) = x(i+half);

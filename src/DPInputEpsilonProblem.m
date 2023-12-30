@@ -29,7 +29,7 @@ classdef DPInputEpsilonProblem < FalsificationProblem
                 [x, fval, counteval, stopflag, out, bestever] = cmaes(this.objective, this.x0', [], solver_opt);
                 res = struct('x',x, 'fval',fval, 'counteval', counteval,  'stopflag', stopflag, 'out', out, 'bestever', bestever);
                 this.res=res;
-                if res.fval < -this.epsilon && this.satisfy(res.x)
+                if res.fval < -this.threshold && this.satisfy(res.x)
                     break;
                 end
             end
@@ -47,13 +47,13 @@ classdef DPInputEpsilonProblem < FalsificationProblem
 
         function x0 = set_X0(this)
             x1 = this.lb + rand(1, numel(this.lb)).*(this.ub - this.lb);
-            x2 = -this.epsilon + rand(1, numel(this.lb))*(2*this.epsilon);
+            x2 = -this.epsilon + rand(1, numel(this.lb)).*(2*this.epsilon);
             x0 = [x1 x2];
         end
 
         function solver_opt = setCMAES(this)
-            l_ = [this.lb -this.epsilon*ones(1, numel(this.lb))];
-            u_ = [this.ub this.epsilon*ones(1, numel(this.lb))];
+            l_ = [this.lb -this.epsilon];
+            u_ = [this.ub this.epsilon];
             solver_opt = cmaes();
             solver_opt.Seed = round(rem(now,1)*1000000);
             solver_opt.LBounds = l_;

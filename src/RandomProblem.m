@@ -1,7 +1,6 @@
 classdef RandomProblem < FalsificationProblem
      properties  
         epsilon
-        deviation
 
         threshold
 
@@ -14,10 +13,11 @@ classdef RandomProblem < FalsificationProblem
      methods
          function this = RandomProblem(BrSet, phi, ep, threshold, locBud)
              this = this@FalsificationProblem(BrSet, phi);
-             this.epsilon = ep;
-             this.deviation = (this.ub - this.lb)*ep;
+             this.epsilon = (this.ub - this.lb)*ep;
              this.threhold = threshold;
              this.local_budget = locBud;
+             this.basic_X = [];
+             this.basic_stlv = [];
              rng('default');
              rng(round(rem(now, 1)*1000000));
          end
@@ -28,16 +28,14 @@ classdef RandomProblem < FalsificationProblem
             this.ResetTimeSpent();
          
             while this.time_spent < this.max_time
-                this.basic_X = this.lb + rand(1, numel(this.lb))*(this.ub - this.lb);
+                this.basic_X = this.lb + rand(1, numel(this.lb)).*(this.ub - this.lb);
                 this.basic_stlv = this.objective_fn(this.basic_X);
-                solver_opt = this.setCMAES();
-
-                this.x0 = this.set_X0();
+                [solver_opt, x0] = this.setCMAES();
             
-                [x, fval, counteval, stopflag, out, bestever] = cmaes(this.objective, this.x0', [], solver_opt);
+                [x, fval, counteval, stopflag, out, bestever] = cmaes(this.objective, x0', [], solver_opt);
                 res = struct('x',x, 'fval',fval, 'counteval', counteval,  'stopflag', stopflag, 'out', out, 'bestever', bestever);
-                %this.res=res;    
-                if res.fval < -this.epsilon
+  
+                if res.fval < -this.threshold
                     break;
                 end
             end
@@ -45,15 +43,15 @@ classdef RandomProblem < FalsificationProblem
             this.DispResultMsg(); 
         end
 
-        function solver_opt = setCMAES(this)
+        function [solver_opt, x0] = setCMAES(this)
             %disp('Setting options for cmaes solver - use help cmaes for details');
-            l_ = this.basic_X - this.deviation;
+            l_ = this.basic_X - this.epsilon;
             for i = 1:numel(l_)
                 if l_(i) < this.lb(i)
                     l_(i) = this.lb(i);
                 end
             end
-            u_ = this.basic_X + this.deviation;
+            u_ = this.basic_X + this.epsilon;
             for j = 1:numel(u_)
                 if u_(j) >  this.ub(j)
                     u_(j) = this.ub(j);
@@ -61,16 +59,14 @@ classdef RandomProblem < FalsificationProblem
             end
 
             solver_opt = cmaes();
-            solver_opt.Seed = 0;
+            solver_opt.Seed = round(rem(now,1)*1000000);
             solver_opt.LBounds = l_;
             solver_opt.UBounds = u_;
             solver_opt.StopIter = this.local_budget;
+
+            x0 = lb_ + rand(1, numel(lb_)).*(ub_ - lb_);
         end
 
-
-        function x0 = set_X0(this)
-
-        end
 
         function fval = objective_wrapper(this, x)
             if this.stopping()==true

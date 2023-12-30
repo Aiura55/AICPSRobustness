@@ -1,7 +1,6 @@
 classdef DPTwoInputProblem < FalsificationProblem
     properties
         epsilon
-        deviation
 
         threshold
     end
@@ -9,8 +8,7 @@ classdef DPTwoInputProblem < FalsificationProblem
     methods
         function this = DPTwoInputProblem(BrSet, phi, ep, threshold)
             this = this@FalsificationProblem(BrSet, phi);
-            this.epsilon = ep;
-            this.deviation = (this.ub - this.lb)*ep;
+            this.epsilon = (this.ub - this.lb)*ep;
             this.threhold = threshold;
             rng('default');
             rng(round(rem(now, 1)*1000000));
@@ -28,7 +26,7 @@ classdef DPTwoInputProblem < FalsificationProblem
                 [x, fval, counteval, stopflag, out, bestever] = cmaes(this.objective, this.x0', [], solver_opt);
                 res = struct('x',x, 'fval',fval, 'counteval', counteval,  'stopflag', stopflag, 'out', out, 'bestever', bestever);
                 this.res=res;
-                if res.fval < -this.epsilon && this.satisfy(res.x)
+                if res.fval < -this.threshold && this.satisfy(res.x)
                     break;
                 end
             end
@@ -37,7 +35,7 @@ classdef DPTwoInputProblem < FalsificationProblem
         function sat = satisfy(this, x)
             sat = true;
             for i = 1:numel(x)/2
-                if abs(x(i) - x(i + numel(x)/2)) > this.epsilon
+                if abs(x(i) - x(i + numel(x)/2)) > this.epsilon(i)
                     sat = false;
                     break;
                 end
@@ -70,7 +68,7 @@ classdef DPTwoInputProblem < FalsificationProblem
                 x_real = x;
 
                 stlv1 = this.objective_fn(x_real(1:x_num/2));
-                stlv2 = this.objective_fn(x_real(x_num/2:x_num));
+                stlv2 = this.objective_fn(x_real(x_num/2+1 : x_num));
                 fval = - abs(stlv1 - stlv2);
 
                 % logging and updating best
