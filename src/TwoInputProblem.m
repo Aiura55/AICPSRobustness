@@ -28,14 +28,14 @@ classdef TwoInputProblem < FalsificationProblem
         end
 
         function x0 = set_X0(this)
-            x1 = this.lb + rand(1, numel(this.lb)).*(this.ub - this.lb);
-            x2 = this.lb + rand(1, numel(this.lb)).*(this.ub - this.lb);
-            x0 = [x1 x2];
+            x1 = this.lb + rand(numel(this.lb), 1).*(this.ub - this.lb);
+            x2 = this.lb + rand(numel(this.lb), 1).*(this.ub - this.lb);
+            x0 = [x1; x2];
         end
 
         function solver_opt = setCMAES(this)
-            l_ = [this.lb this.lb];
-            u_ = [this.ub this.ub];
+            l_ = [this.lb; this.lb];
+            u_ = [this.ub; this.ub];
             solver_opt = cmaes();
             solver_opt.Seed = round(rem(now,1)*1000000);
             solver_opt.LBounds = l_;

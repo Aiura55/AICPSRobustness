@@ -28,7 +28,7 @@ classdef RandomProblem < FalsificationProblem
             this.ResetTimeSpent();
          
             while this.time_spent < this.max_time
-                this.basic_X = this.lb + rand(1, numel(this.lb)).*(this.ub - this.lb);
+                this.basic_X = this.lb + rand(numel(this.lb), 1).*(this.ub - this.lb);
                 this.basic_stlv = this.objective_fn(this.basic_X);
                 [solver_opt, x0] = this.setCMAES();
             
@@ -64,7 +64,7 @@ classdef RandomProblem < FalsificationProblem
             solver_opt.UBounds = u_;
             solver_opt.StopIter = this.local_budget;
 
-            x0 = lb_ + rand(1, numel(lb_)).*(ub_ - lb_);
+            x0 = lb_ + rand(numel(lb_), 1).*(ub_ - lb_);
         end
 
 
