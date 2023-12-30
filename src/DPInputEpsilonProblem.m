@@ -1,18 +1,21 @@
 classdef DPInputEpsilonProblem < FalsificationProblem
     properties
         epsilon
-        deviation
 
         threshold
         map_param 
+
+        falsified
     end
 
     methods
         function this = DPInputEpsilonProblem(BrSet, phi, ep, threshold)
             this = this@FalsificationProblem(BrSet, phi);
-            this.epsilon = ep;
-            this.deviation = (this.ub - this.lb)*ep;
+            this.epsilon = (this.ub - this.lb)*ep;
+           
             this.threshold = threshold;
+
+            this.falsified = false;
             rng('default');
             rng(round(rem(now, 1)*1000000));
         end
@@ -21,6 +24,7 @@ classdef DPInputEpsilonProblem < FalsificationProblem
             rfprintf_reset();
             % reset time
             this.ResetTimeSpent();
+            this.falsified = false;
 
             while this.time_spent < this.max_time
                 this.x0 = this.set_X0();
@@ -30,6 +34,7 @@ classdef DPInputEpsilonProblem < FalsificationProblem
                 res = struct('x',x, 'fval',fval, 'counteval', counteval,  'stopflag', stopflag, 'out', out, 'bestever', bestever);
                 this.res=res;
                 if res.fval < -this.threshold && this.satisfy(res.x)
+                    this.falsified = true;
                     break;
                 end
             end

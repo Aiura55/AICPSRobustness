@@ -3,6 +3,8 @@ classdef TwoInputProblem < FalsificationProblem
     properties
         epsilon
         threshold
+
+        falsified
     end
 
     methods
@@ -10,6 +12,8 @@ classdef TwoInputProblem < FalsificationProblem
             this = this@FalsificationProblem(BrSet, phi);
             this.epsilon = (this.ub - this.lb)*ep;
             this.threshold = threshold;
+
+            this.falsified = false;
             rng('default');
             rng(round(rem(now, 1)*1000000));
         end
@@ -18,6 +22,7 @@ classdef TwoInputProblem < FalsificationProblem
             rfprintf_reset();
             % reset time
             this.ResetTimeSpent();
+            this.falsified = false;
 
             this.x0 = this.set_X0();
             solver_opt = this.setCMAES();
@@ -25,6 +30,9 @@ classdef TwoInputProblem < FalsificationProblem
             [x, fval, counteval, stopflag, out, bestever] = cmaes(this.objective, this.x0', [], solver_opt);
             res = struct('x',x, 'fval',fval, 'counteval', counteval,  'stopflag', stopflag, 'out', out, 'bestever', bestever);
             this.res=res;
+            if res.fval < -this.threshold
+                this.falsified = true;
+            end
         end
 
         function x0 = set_X0(this)

@@ -8,6 +8,8 @@ classdef RandomProblem < FalsificationProblem
 
         basic_X
         basic_stlv
+
+        falsified
      end
 
      methods
@@ -18,6 +20,7 @@ classdef RandomProblem < FalsificationProblem
              this.local_budget = locBud;
              this.basic_X = [];
              this.basic_stlv = [];
+             this.falsified = false;
              rng('default');
              rng(round(rem(now, 1)*1000000));
          end
@@ -26,6 +29,7 @@ classdef RandomProblem < FalsificationProblem
             rfprintf_reset();         
             % reset time
             this.ResetTimeSpent();
+            this.falsified = false;
          
             while this.time_spent < this.max_time
                 this.basic_X = this.lb + rand(numel(this.lb), 1).*(this.ub - this.lb);
@@ -36,11 +40,11 @@ classdef RandomProblem < FalsificationProblem
                 res = struct('x',x, 'fval',fval, 'counteval', counteval,  'stopflag', stopflag, 'out', out, 'bestever', bestever);
   
                 if res.fval < -this.threshold
+                    this.falsified = true;
                     break;
                 end
             end
-
-            this.DispResultMsg(); 
+            
         end
 
         function [solver_opt, x0] = setCMAES(this)
@@ -64,7 +68,7 @@ classdef RandomProblem < FalsificationProblem
             solver_opt.UBounds = u_;
             solver_opt.StopIter = this.local_budget;
 
-            x0 = lb_ + rand(numel(lb_), 1).*(ub_ - lb_);
+            x0 = l_ + rand(numel(l_), 1).*(u_ - l_);
         end
 
 

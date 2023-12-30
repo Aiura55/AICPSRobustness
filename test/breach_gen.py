@@ -162,7 +162,7 @@ for ph in phi_str:
 							bm.write('\tfalsif_pb.max_obj_eval = ' + max_sim + ';\n')
 						bm.write('\tfalsif_pb.setup_solver(\''+ opt  +'\');\n')
 						bm.write('\tfalsif_pb.solve();\n')
-						bm.write('\tif falsif_pb.obj_best < -threshold\n')
+						bm.write('\tif falsif_pb.falsified == true\n')
 						bm.write('\t\tfalsified = [falsified;1];\n')
 						bm.write('\telse\n')
 						bm.write('\t\tfalsified = [falsified;0];\n')
