@@ -3,16 +3,7 @@ import platform
 import glob
 import os
 
-matlab = ''
-osys = platform.system()
-if osys == 'Linux':
-	mpaths = glob.glob('/usr/local/MATLAB/*/bin/')
-	mpaths.sort()
-	matlab = mpaths[-1] + 'matlab'
-elif osys == 'Darwin':
-	mpaths = glob.glob('/Applications/MATLAB*/bin/')
-	mpaths.sort()
-	matlab = mpaths[-1] + 'matlab'
+matlab = 'matlab'
 
 
 model = ''
