@@ -11,10 +11,10 @@ fault_time=50;
 kp=0.04;
 ki=0.14;
 T=50;
-epsilon 1
-0.03
-threshold 1
-1
+epsilon 6
+0.01 0.01 0.03 0.03 0.05 0.05
+threshold 6
+0.1 0.2 0.1 0.2 0.1 0.2
 input_name 2
 Engine_Speed
 Pedal_Angle
@@ -39,8 +39,8 @@ AFC1 alw_[0,30](AF[t] < 1.2*14.7 and AF[t] > 0.8*14.7)
 timeout 1
 600
 trials 1
-1
-locBudget 1
 10
+locBudget 1
+3
 addpath 1
-/Users/zhenya/git/AICPSRobustness/
+/home/wataru/AICPSRobustness
