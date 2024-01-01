@@ -11,10 +11,10 @@ fault_time=50;
 kp=0.04;
 ki=0.14;
 T=50;
-epsilon 6
-0.01 0.01 0.03 0.03 0.05 0.05
-threshold 6
-0.1 0.2 0.1 0.2 0.1 0.2
+epsilon 9
+0.01 0.01 0.01 0.03 0.03 0.03 0.05 0.05 0.05
+threshold 9
+0.05 0.1 0.2 0.05 0.1 0.2 0.05 0.1 0.2
 input_name 2
 Engine_Speed
 Pedal_Angle
