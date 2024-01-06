@@ -4,6 +4,9 @@ classdef DPTwoInputProblem < FalsificationProblem
 
         threshold
         falsified
+
+        X_total_log
+        obj_total_log
     end
 
     methods
@@ -12,6 +15,8 @@ classdef DPTwoInputProblem < FalsificationProblem
             this.epsilon = (this.ub - this.lb)*ep;
             this.threshold = threshold;
             this.falsified = false;
+            this.X_total_log = [];
+            this.obj_total_log = [];
             rng('default');
             rng(round(rem(now, 1)*1000000));
         end
@@ -23,6 +28,7 @@ classdef DPTwoInputProblem < FalsificationProblem
             this.falsified = false;
 
             while this.time_spent < this.max_time
+                this.resetLog();
                 this.x0 = this.set_X0();
                 solver_opt = this.setCMAES();
                 
@@ -35,6 +41,15 @@ classdef DPTwoInputProblem < FalsificationProblem
                 end
             end
         end
+
+        function resetLog(this)
+            this.X_total_log = [this.X_total_log this.X_log];
+            this.obj_total_log = [this.obj_total_log this.obj_log];
+            this.x_best = [];
+            this.obj_best = inf;
+        end
+
+        
 
         function sat = satisfy(this, x)
             sat = true;
@@ -84,6 +99,11 @@ classdef DPTwoInputProblem < FalsificationProblem
                 end
                 
             end
+        end
+
+        function LogX(this, x, fval)
+            this.LogX@FalsificationProblem(x, fval);
+            this.nb_obj_eval= numel(this.obj_total_log);
         end
         
         function b = stopping(this)
