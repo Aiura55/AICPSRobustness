@@ -85,7 +85,7 @@ classdef TwoInputProblem < FalsificationProblem
                     x_real(i) = pivot - shift;
                     x_real(i + half) = pivot + shift;
                 elseif x(i+half) < x(i)
-                    shift = (x(i) - x(i+half)*(this.epsilon(i))/(this.ub(i) - x(i) + this.ub(i) - x(i+half)))/2;
+                    shift = ((x(i) - x(i+half))*(this.epsilon(i))/(this.ub(i) - x(i) + this.ub(i) - x(i+half)))/2;
                     pivot = x(i+half)+ (x(i) - x(i+half))/2;
                     x_real(i) = pivot + shift;
                     x_real(i + half) = pivot - shift;

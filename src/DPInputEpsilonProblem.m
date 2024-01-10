@@ -40,7 +40,7 @@ classdef DPInputEpsilonProblem < FalsificationProblem
                 [x, fval, counteval, stopflag, out, bestever] = cmaes(this.objective, this.x0', [], solver_opt);
                 res = struct('x',x, 'fval',fval, 'counteval', counteval,  'stopflag', stopflag, 'out', out, 'bestever', bestever);
                 this.res=res;
-                if res.fval < -this.threshold && this.satisfy(res.x)
+                if min(res.fval) < -this.threshold && this.satisfy(res.x)
                     this.falsified = true;
                     break;
                 end
@@ -50,6 +50,8 @@ classdef DPInputEpsilonProblem < FalsificationProblem
         function resetLog(this)
             this.X_total_log = [this.X_total_log this.X_log];
             this.obj_total_log = [this.obj_total_log this.obj_log];
+            this.X_log = [];
+            this.obj_log = [];
             this.x_best = [];
             this.obj_best = inf;
         end
@@ -106,7 +108,7 @@ classdef DPInputEpsilonProblem < FalsificationProblem
 
         function LogX(this, x, fval)
             this.LogX@FalsificationProblem(x, fval);
-            this.nb_obj_eval= numel(this.obj_total_log);
+            this.nb_obj_eval= numel(this.obj_total_log) + numel(this.obj_log);
         end
 
         
