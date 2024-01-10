@@ -5,26 +5,20 @@ T=15;
 Ts=0.1;
 h_ref_min=10;
 h_ref_max=20;
-epsilon 9
+epsilon 6
 0.01
 0.01
-0.01
-0.03
 0.03
 0.03
 0.05
 0.05
-0.05
-threshold 9
-0.01
-0.03
-0.05
-0.03
-0.08
-0.13
-0.05
+threshold 6
+0.07
 0.1
+0.18
+0.23
 0.15
+0.2
 input_name 1
 h_ref
 input_range 1
@@ -51,4 +45,4 @@ trials 1
 locBudget 1
 3
 addpath 1
-/home/wataru/AICPSRobustness
+/home/zhenya/AICPSRobustness

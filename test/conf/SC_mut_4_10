@@ -5,25 +5,19 @@ T=35;
 Ts=0.1;
 min_Fs=3.99;
 max_Fs=4.01;
-epsilon 9
-0.01
+epsilon 6
 0.01
 0.01
 0.03
 0.03
-0.03
 0.05
 0.05
-0.05
-threshold 9
-0.0005
-0.0008
+threshold 6
+0.001
 0.0012
-0.0015
-0.0025
-0.0035
 0.003
-0.004
+0.0035
+0.0045
 0.005
 input_name 1
 Fs
@@ -51,4 +45,4 @@ trials 1
 locBudget 1
 3
 addpath 1
-/home/wataru/AICPSRobustness
+/home/zhenya/AICPSRobustness
