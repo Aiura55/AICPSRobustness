@@ -75,22 +75,60 @@ classdef TwoInputProblem < FalsificationProblem
             end
         end
 
+%         function x_real = mapping(this, x)
+%             x_real = x;
+%             half = numel(x)/2;
+%             for i = 1:half
+%                 if x(i+half) > x(i)
+%                     shift = ((x(i+half) - x(i))*(this.epsilon(i))/(x(i+half)-this.lb(i) + x(i) - this.lb(i)))/2;
+%                     pivot = x(i) + (x(i+half) - x(i))/2;
+%                     x_real(i) = pivot - shift;
+%                     x_real(i + half) = pivot + shift;
+%                 elseif x(i+half) < x(i)
+%                     shift = ((x(i) - x(i+half))*(this.epsilon(i))/(this.ub(i) - x(i) + this.ub(i) - x(i+half)))/2;
+%                     pivot = x(i+half)+ (x(i) - x(i+half))/2;
+%                     x_real(i) = pivot + shift;
+%                     x_real(i + half) = pivot - shift;
+%                 else
+%                     x_real = x;
+%                 end
+%             end
+%         end
+
         function x_real = mapping(this, x)
             x_real = x;
             half = numel(x)/2;
             for i = 1:half
-                if x(i+half) > x(i)
-                    shift = ((x(i+half) - x(i))*(this.epsilon(i))/(x(i+half)-this.lb(i) + x(i) - this.lb(i)))/2;
-                    pivot = x(i) + (x(i+half) - x(i))/2;
-                    x_real(i) = pivot - shift;
-                    x_real(i + half) = pivot + shift;
-                elseif x(i+half) < x(i)
-                    shift = ((x(i) - x(i+half))*(this.epsilon(i))/(this.ub(i) - x(i) + this.ub(i) - x(i+half)))/2;
-                    pivot = x(i+half)+ (x(i) - x(i+half))/2;
-                    x_real(i) = pivot + shift;
-                    x_real(i + half) = pivot - shift;
-                else
-                    x_real = x;
+                if this.epsilon(i) < (x(i)-this.lb(i) + x(i+half)-this.lb(i)) && this.epsilon(i) < (this.ub(i) - x(i) + this.ub(i) - x(i+half))
+                    if x(i+half) > x(i)
+   
+                        range = (this.ub(i) - this.lb(i));
+                        if (x(i+half)-this.lb(i) + x(i) - this.lb(i)) <= range
+                            A = range*2 -(x(i+half)-this.lb(i) + x(i) - this.lb(i));
+                        else
+                            A = x(i+half)-this.lb(i) + x(i) - this.lb(i);
+                        end
+   
+                        shift = ((x(i+half) - x(i))*(this.epsilon(i))/A/2;
+                        pivot = x(i) + (x(i+half) - x(i))/2;
+                        x_real(i) = pivot - shift;
+                        x_real(i + half) = pivot + shift;
+                    elseif x(i+half) < x(i)
+   
+                        range = (this.ub(i) - this.lb(i));
+                        if (x(i+half)-this.lb(i) + x(i) - this.lb(i)) <= range
+                            A = range*2 -(x(i+half)-this.lb(i) + x(i) - this.lb(i));
+                        else
+                            A = x(i+half)-this.lb(i) + x(i) - this.lb(i);
+                        end
+   
+                        shift = ((x(i) - x(i+half))*(this.epsilon(i))/A/2;
+                        pivot = x(i+half)+ (x(i) - x(i+half))/2;
+                        x_real(i) = pivot + shift;
+                        x_real(i + half) = pivot - shift;
+                    else
+                        x_real = x;
+                    end
                 end
             end
         end
