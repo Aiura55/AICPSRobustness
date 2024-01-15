@@ -109,7 +109,7 @@ classdef TwoInputProblem < FalsificationProblem
                             A = x(i+half)-this.lb(i) + x(i) - this.lb(i);
                         end
    
-                        shift = ((x(i+half) - x(i))*(this.epsilon(i))/A/2;
+                        shift = ((x(i+half) - x(i))*(this.epsilon(i))/A)/2;
                         pivot = x(i) + (x(i+half) - x(i))/2;
                         x_real(i) = pivot - shift;
                         x_real(i + half) = pivot + shift;
@@ -122,7 +122,7 @@ classdef TwoInputProblem < FalsificationProblem
                             A = x(i+half)-this.lb(i) + x(i) - this.lb(i);
                         end
    
-                        shift = ((x(i) - x(i+half))*(this.epsilon(i))/A/2;
+                        shift = ((x(i) - x(i+half))*(this.epsilon(i))/A)/2;
                         pivot = x(i+half)+ (x(i) - x(i+half))/2;
                         x_real(i) = pivot + shift;
                         x_real(i + half) = pivot - shift;
