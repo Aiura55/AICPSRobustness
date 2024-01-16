@@ -5,20 +5,18 @@ T=35;
 Ts=0.1;
 min_Fs=3.99;
 max_Fs=4.01;
-epsilon 6
+epsilon 5
 0.01
 0.01
 0.03
 0.03
 0.05
-0.05
-threshold 6
-0.001
-0.0012
-0.003
-0.0035
-0.0045
-0.005
+threshold 5
+0.0005
+0.0008
+0.0025
+0.0028
+0.0048
 input_name 1
 Fs
 input_range 1

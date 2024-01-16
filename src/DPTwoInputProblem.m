@@ -37,6 +37,7 @@ classdef DPTwoInputProblem < FalsificationProblem
                 this.res=res;
                 if min(res.fval) < -this.threshold && this.satisfy(res.x)
                     this.falsified = true;
+                    res.x
                     break;
                 end
             end
