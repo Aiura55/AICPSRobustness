@@ -85,10 +85,10 @@ classdef InputEpsilonProblem < FalsificationProblem
                 for i = 1:half
                     if x(i) < this.lb(i) + this.epsilon(i)
                         x_real(i) = x(i);
-                        x_real(i+half) = this.epsilon(i) - ((this.epsilon(i) - x(i+half))*(this.epsilon(i) + x(i)-this.lb(i))/2*this.epsilon(i));
+                        x_real(i+half) = this.epsilon(i) - ((this.epsilon(i) - x(i+half))*(this.epsilon(i) + x(i)-this.lb(i))/(2*this.epsilon(i)));
                     elseif x(i) >  this.ub(i) - this.epsilon(i)
                         x_real(i) = x(i);
-                        x_real(i+half) = ((x(i+half)+this.epsilon(i))*(this.epsilon(i) + this.ub(i) - x(i))/2*this.epsilon(i)) - this.epsilon(i);
+                        x_real(i+half) = ((x(i+half)+this.epsilon(i))*(this.epsilon(i) + this.ub(i) - x(i))/(2*this.epsilon(i))) - this.epsilon(i);
                     else
                         x_real(i) = x(i);
                         x_real(i+half) = x(i+half);
