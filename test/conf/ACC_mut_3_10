@@ -1,5 +1,5 @@
 model 1
-ACC_FFNN_trainlm_10_10_10_10_Nor_Sat_Feb_15
+ACC_FFNN_trainlm_10_10_10_Nor_Sat_Feb_15
 parameters 17
 T=50;
 Ts=0.1;
