@@ -1,4 +1,4 @@
-This is the repository for the paper ""
+This is the repository for the paper "On the Robustness of AI-Enabled Cyber-Physical Systems"
 
 ***
 
@@ -20,3 +20,8 @@ This is the repository for the paper ""
 - Install [Breach](https://github.com/decyphir/breach).
   1. start matlab, set up a C/C++ compiler using the command `mex -setup`. (Refer to [here](https://www.mathworks.com/help/matlab/matlab_external/changing-default-compiler.html) for more details.)
   2. navigate to `breach/` in Matlab commandline, and run `InstallBreach`
+
+## Steps to reproduce the results in the paper
+
+1. Navigate to `test/`, and run `python breach_gen.py [configuration file]`, where `[configuration file]` can be anyone from `test/conf/`
+2. Navigate to the project home, and run `make`.
