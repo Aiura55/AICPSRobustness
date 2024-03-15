@@ -11,20 +11,16 @@ tau_ww_tol=1;
 fault_time=50;
 kp=0.04;
 ki=0.14;
-epsilon 6
+epsilon 4
 0.01
 0.01
 0.03
 0.03
-0.05
-0.05
-threshold 6
+threshold 4
 0.15
 0.2
 0.2
 0.3
-0.5
-0.8
 input_name 2
 Engine_Speed
 Pedal_Angle
@@ -49,7 +45,7 @@ AFC1 alw_[0,30](AF[t] < 1.2*14.7 and AF[t] > 0.8*14.7)
 timeout 1
 600
 trials 1
-10
+20
 locBudget 1
 3
 addpath 1

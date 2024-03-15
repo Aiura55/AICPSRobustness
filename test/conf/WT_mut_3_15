@@ -5,10 +5,14 @@ T=15;
 Ts=0.1;
 h_ref_min=10;
 h_ref_max=20;
-epsilon 2
+epsilon 4
+0.03
+0.03
 0.05
 0.05
-threshold 2
+threshold 4
+0.18
+0.23
 0.25
 0.3
 input_name 1
@@ -33,7 +37,7 @@ WT1 alw_[4,4.9](h_error[t] < 0.86 and h_error[t] > -0.86) and alw_[9,9.9](h_erro
 timeout 1
 600
 trials 1
-10
+20
 locBudget 1
 3
 addpath 1
