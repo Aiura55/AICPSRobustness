@@ -127,7 +127,9 @@ classdef TwoInputProblem < FalsificationProblem
                         x_real(i) = pivot + shift;
                         x_real(i + half) = pivot - shift;
                     else
-                        x_real = x;
+                        %x_real = x;
+						x_real(i) = x(i);
+						x_real(i+half) = x(i+half);
                     end
                 end
             end
