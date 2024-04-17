@@ -93,7 +93,7 @@ for ph in phi_str:
 			for alg in algorithm:
 				for eps_i in range(len(epsilon)):
 					property = ph.split(';')
-					filename = model+ '_' + alg + '_' + property[0] + '_' + epsilon[eps_i] + '_' + threshold[eps_i]
+					filename = 'bound_' + model+ '_' + alg + '_' + property[0] + '_' + epsilon[eps_i] + '_' + threshold[eps_i]
 					param = '\n'.join(parameters)
 					with open('benchmarks/'+filename,'w') as bm:
 						bm.write('#!/bin/sh\n')
@@ -128,6 +128,7 @@ for ph in phi_str:
 						bm.write('epsilonU =' + epsilon[eps_i] + ';\n')
 						bm.write('Ls = [0];\n')
 						bm.write('Us = [' + epsilon[eps_i] + '];\n')
+						bm.write('Times = [0];\n')
 
 						if alg == 'Random':
 							bm.write('locBudget = '+ locBudget + ';\n')
@@ -164,6 +165,7 @@ for ph in phi_str:
 						bm.write('\t\tfalsif_pb.setup_solver(\''+ opt  +'\');\n')
 						bm.write('\t\tfalsif_pb.solve();\n')
 						bm.write('\t\ttime = toc;\n')
+						bm.write('\t\tTimes = [Times;time];\n')
 						bm.write('\t\tif time > time_budget\n')
 						bm.write('\t\t\tend_flag = true;\n')
 						bm.write('\t\t\tbreak;\n')
@@ -191,7 +193,7 @@ for ph in phi_str:
 	
 
 
-						bm.write('result = table(Ls, Us);\n')
+						bm.write('result = table(Times, Ls, Us);\n')
 				
 						bm.write('writetable(result,\'$csv\',\'Delimiter\',\';\');\n')
 						bm.write('quit force\n')
