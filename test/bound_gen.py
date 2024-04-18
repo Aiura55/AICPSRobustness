@@ -165,7 +165,6 @@ for ph in phi_str:
 						bm.write('\t\tfalsif_pb.setup_solver(\''+ opt  +'\');\n')
 						bm.write('\t\tfalsif_pb.solve();\n')
 						bm.write('\t\ttime = toc;\n')
-						bm.write('\t\tTimes = [Times;time];\n')
 						bm.write('\t\tif time > time_budget\n')
 						bm.write('\t\t\tend_flag = true;\n')
 						bm.write('\t\t\tbreak;\n')
@@ -177,6 +176,7 @@ for ph in phi_str:
 						bm.write('\t\t\tepsilonU = epsilon;\n')
 						bm.write('\t\t\tLs = [Ls; epsilonL];\n')
 						bm.write('\t\t\tUs = [Us; epsilonU];\n')
+						bm.write('\t\t\tTimes = [Times; time];\n')
 						bm.write('\t\t\tbreak;\n')
 						bm.write('\t\tend\n')
 						bm.write('\tend\n')
@@ -187,6 +187,7 @@ for ph in phi_str:
 						bm.write('\t\tepsilonL = epsilon;\n')
 						bm.write('\t\tLs = [Ls; epsilonL];\n')
 						bm.write('\t\tUs = [Us; epsilonU];\n')
+						bm.write('\t\tTimes = [Times; time];\n')
 						bm.write('\tend\n')
 						bm.write('end\n')
 
