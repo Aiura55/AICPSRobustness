@@ -1,4 +1,4 @@
-This is the repository for the paper "On the Robustness of AI-Enabled Cyber-Physical Systems"
+This is the repository for the paper "Robustness Assessment of DNN Controllers of AI-Enabled CPS"
 
 ***
 
