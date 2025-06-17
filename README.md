@@ -1,4 +1,4 @@
-This is the repository for the paper "Relational Falsification of Hybrid Systems" submitted to CAV-2025
+This is the repository for the paper "Relational Falsification of Hybrid Systems".
 ***
 
 ## System requirement
