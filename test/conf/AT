@@ -27,6 +27,6 @@ timeout 1
 trials 1
 5
 locBudget 1
-3
+10
 addpath 1
 /home/zhenya/AICPSRobustness
