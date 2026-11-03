@@ -125,7 +125,7 @@ for ph in phi_str:
 						bm.write('obj_best = [];\n')
 						bm.write('num_sim = [];\n')
 
-						if alg == 'Random':
+						if alg == 'Random' or alg == 'const':
 							bm.write('locBudget = '+ locBudget + ';\n')
 		
 						bm.write('epsilon = ' + epsilon[eps_i] + ';\n')
@@ -134,6 +134,8 @@ for ph in phi_str:
 						bm.write('for n = 1:trials\n')
 						if alg == 'Random':
 							bm.write('\tfalsif_pb = RandomProblem(Br,phi,epsilon,threshold,locBudget);\n')
+						elif alg == 'const':
+							bm.write('\tfalsif_pb = ConstrainedProblem(Br, phi, epsilon, threshold, locBudget);\n')
 						elif alg == 'TwoInput':
 							bm.write('\tfalsif_pb = TwoInputProblem(Br, phi,epsilon,threshold);\n')
 						elif alg == 'InputEpsilon1':
@@ -151,7 +153,8 @@ for ph in phi_str:
 							bm.write('\tfalsif_pb.max_time = '+ timeout + ';\n')
 						if max_sim!='':
 							bm.write('\tfalsif_pb.max_obj_eval = ' + max_sim + ';\n')
-						bm.write('\tfalsif_pb.setup_solver(\''+ opt  +'\');\n')
+						if alg != 'const':
+							bm.write('\tfalsif_pb.setup_solver(\''+ opt  +'\');\n')
 						bm.write('\tfalsif_pb.solve();\n')
 						bm.write('\tif falsif_pb.falsified == true\n')
 						bm.write('\t\tfalsified = [falsified;1];\n')
