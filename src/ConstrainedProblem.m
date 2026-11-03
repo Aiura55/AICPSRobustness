@@ -115,12 +115,12 @@ classdef ConstrainedProblem < FalsificationProblem
             lower_u2 = max(this.lb, u1 - this.epsilon);
             upper_u2 = min(this.ub, u1 + this.epsilon);
 
-			delta = 0.1 * (2 * rand(n, 1) - 1) .* this.epsilon;
-			u2 = min(max(u1 + delta, this.lb), this.ub);
+%			delta = 0.1 * (2 * rand(n, 1) - 1) .* this.epsilon;
+%			u2 = min(max(u1 + delta, this.lb), this.ub);
 
 
-%            u2 = lower_u2 + rand(n, 1) .* ...
-%                (upper_u2 - lower_u2);
+            u2 = lower_u2 + rand(n, 1) .* ...
+                (upper_u2 - lower_u2);
 
             x0 = [u1; u2];
 
